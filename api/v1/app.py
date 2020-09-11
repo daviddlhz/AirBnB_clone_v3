@@ -4,11 +4,13 @@ Flask web application api
 """
 from flask import Blueprint
 from flask import Flask, jsonify
+from flask_cors import CORS
 from models import storage
 from api.v1.views import app_views
 import os
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 app.register_blueprint(app_views, url_prefix='/api/v1')
 
@@ -21,8 +23,8 @@ def teardown_db(exception):
 
 @app.errorhandler(404)
 def page_not_found(e):
-        """set the 404 status"""
-        return jsonify({"error": "Not found"}), 404
+    """set the 404 status explicitly"""
+    return jsonify({"error": "Not found"}), 404
 
 
 if __name__ == '__main__':
