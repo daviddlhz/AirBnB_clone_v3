@@ -1,33 +1,34 @@
 #!/usr/bin/python3
-"""
-Index view
-"""
-from flask import jsonify
+"""Index file using blueprint"""
 from api.v1.views import app_views
+from flask import Flask, jsonify
 from models import storage
-from models.state import State
-from models.city import City
-from models.place import Place
-from models.review import Review
-from models.user import User
-from models.amenity import Amenity
 
 
-@app_views.route('/status', methods=['GET'], strict_slashes=False)
-def jsonify_app():
-        """
-        Return a JSON
-        """
-        return jsonify({"status": "OK"})
+classes = {
+    "amenities": "Amenity",
+    "cities": "City",
+    "places": "Place",
+    "reviews": "Review",
+    "states": "State",
+    "users": "User"
+    }
 
 
-@app_views.route('/stats', methods=['GET'], strict_slashes=False)
-def some_stats():
-        """ Retrieves the number of each objects by type """
-        dict = {"amenities": storage.count(Amenity),
-                "cities": storage.count(City),
-                "places": storage.count(Place),
-                "reviews": storage.count(Review),
-                "states": storage.count(State),
-                "users": storage.count(User)}
-        return jsonify(dict)
+@app_views.route('/status', strict_slashes=False)
+def index():
+    """return a status"""
+    return jsonify({"status": "OK"})
+
+
+@app_views.route('/stats', strict_slashes=False)
+def stats():
+    """return a stats"""
+    new_dict = {}
+    for key, value in classes.items():
+        new_dict[key] = storage.count(value)
+    return jsonify(new_dict)
+
+
+if __name__ == "__main__":
+    pass

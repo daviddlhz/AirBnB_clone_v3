@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-"""
-Flask web application api
-"""
+"""API started"""
 from flask import Flask, Blueprint, jsonify, make_response
 from models import storage
 from api.v1.views import app_views
